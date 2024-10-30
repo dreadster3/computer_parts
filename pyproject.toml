@@ -1,0 +1,14 @@
+[tool.poetry]
+name = "computer-parts"
+version = "0.1.0"
+description = "Computer part identification tool using computer vision"
+authors = ["dreadster3 <afonso.antunes@live.com.pt>"]
+license = "Apache-2.0"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
