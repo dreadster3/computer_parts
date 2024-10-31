@@ -30,8 +30,25 @@
       devShells = forAllSystems (system:
         let pkgs = nixpkgsFor.${system};
         in {
-          default =
-            pkgs.mkShell { buildInputs = with pkgs; [ pyright poetry ]; };
+          default = pkgs.mkShell {
+            buildInputs = with pkgs; [
+              python3
+              python3Packages.tkinter
+              pyright
+              poetry
+            ];
+
+            shellHook = ''
+              export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:${
+                pkgs.lib.makeLibraryPath [
+                  pkgs.zlib
+                  pkgs.stdenv.cc.cc.lib
+                  pkgs.libGL
+                  pkgs.glib
+                ]
+              }
+            '';
+          };
         });
 
       # The default package for 'nix build'. This makes sense if the

@@ -5,9 +5,19 @@ description = "Computer part identification tool using computer vision"
 authors = ["dreadster3 <afonso.antunes@live.com.pt>"]
 license = "Apache-2.0"
 readme = "README.md"
+packages = [{ include = "computerparts" }]
 
 [tool.poetry.dependencies]
 python = "^3.12"
+pillow = "^11.0.0"
+ultralytics = "^8.3.25"
+
+[tool.poetry.group.dev.dependencies]
+autoflake8 = "^0.4.1"
+
+[tool.poetry.scripts]
+computerparts = "computerparts:main"
+
 
 [build-system]
 requires = ["poetry-core"]
