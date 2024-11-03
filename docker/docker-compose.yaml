@@ -17,8 +17,8 @@ services:
     #   - "80:80"
     volumes:
       - ./nginx.conf:/etc/nginx/nginx.conf
-      - static_files:/etc/nginx/static
-      - uploads:/etc/nginx/uploads
+      - static_files:/etc/nginx/content/static
+      - uploads:/etc/nginx/content/uploads
 
 volumes:
   static_files:
