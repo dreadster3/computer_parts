@@ -1,3 +1,5 @@
+name: computerparts
+
 services:
   web:
     build:
