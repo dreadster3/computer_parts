@@ -1,0 +1,28 @@
+[tool.poetry]
+name = "computer-parts"
+version = "0.1.0"
+description = "Identify computer components from images"
+authors = ["dreadster3 <afonso.antunes@live.com.pt>"]
+readme = "README.md"
+license = "Apache-2.0"
+packages = [{ include = "config" }]
+
+[tool.poetry.dependencies]
+python = "^3.12"
+django = "^5.1.2"
+django-htmx = "^1.21.0"
+pillow = "^11.0.0"
+ultralytics = "^8.3.27"
+django-tailwind = "^3.8.0"
+django-render-block = "^0.10"
+
+[tool.poetry.scripts]
+server = "manage:main"
+
+[tool.poetry.group.dev.dependencies]
+django-types = "^0.19.1"
+django-tailwind = {version = "^3.8.0", extras = ["reload"]}
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

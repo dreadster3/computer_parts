@@ -1,0 +1,38 @@
+<form
+  id="image-upload-form"
+  class="flex items-center w-full py-5"
+  method="POST"
+  hx-post=""
+  hx-encoding="multipart/form-data"
+  hx-swap="none"
+>
+  {% csrf_token %}
+  <div
+    id="form-data"
+    class="flex flex-col max-w-full w-full items-center gap-2"
+  >
+    <div class="grid w-full max-w-lg items-center gap-1.5">
+      <label for="image">Image</label>
+      <input
+        name="image"
+        type="file"
+        accept="image/*"
+        class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+      />
+    </div>
+    <button class="btn btn-primary w-32" type="submit">Upload</button>
+    {% block error %}
+      {% if errors %}
+        <div hx-swap-oob="beforeend:#form-data">
+          <div
+            class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative"
+            role="alert"
+          >
+            <strong class="font-bold">Error: </strong>
+            <span class="block sm:inline">{{ errors }}</span>
+          </div>
+        </div>
+      {% endif %}
+    {% endblock %}
+  </div>
+</form>
