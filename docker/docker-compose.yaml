@@ -13,8 +13,8 @@ services:
       - uploads:/usr/src/app/uploads
   proxy:
     image: nginx:latest
-    ports:
-      # - "80:80"
+    # ports:
+    #   - "80:80"
     volumes:
       - ./nginx.conf:/etc/nginx/nginx.conf
       - static_files:/etc/nginx/static
