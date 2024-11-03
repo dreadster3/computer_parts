@@ -23,6 +23,10 @@ server = "manage:main"
 django-types = "^0.19.1"
 django-tailwind = {version = "^3.8.0", extras = ["reload"]}
 
+
+[tool.poetry.group.prod.dependencies]
+gunicorn = "^23.0.0"
+
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
