@@ -166,7 +166,7 @@ MEDIA_URL = "uploads/"
 YOLO_MODEL_ROOT = BASE_DIR / "models"
 YOLO_MODEL_NAME = os.getenv("YOLO_MODEL_NAME", "20241030.pt")
 YOLO_MODEL = YOLO(YOLO_MODEL_ROOT / YOLO_MODEL_NAME)
-YOLO_CONFIDENCE_THRESHOLD = float(os.getenv("YOLO_CONFIDENCE_THRESHOLD", 0.7))
+YOLO_CONFIDENCE_THRESHOLD = os.getenv("YOLO_CONFIDENCE_THRESHOLD", 0.7)
 
 DUMMY_MODELS = {
     "SSD": ["Samsung 860 EVO", "Samsung 970 EVO", "Samsung 980 PRO", "Crucial MX500", "Crucial P1", "Crucial P2", "Crucial P5", "Crucial P6", "Crucial P7", "Crucial P8", "Crucial P9", "Crucial P10"],

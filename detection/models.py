@@ -1,5 +1,6 @@
 from __future__ import annotations
 import random
+import logging
 
 from PIL.Image import Image
 from django import forms
@@ -29,12 +30,15 @@ class Detection(models.Model):
     processed_image = models.ImageField(upload_to="processed/", unique=True)
 
     def save(self, *args, **kwargs):
+        logger = logging.getLogger(__name__)
         self.hash = hash_image(self.image)
 
         extension = self.image.name.split(".")[-1]
         result = process_image(extension, self.image.file)
 
         processed_image = plot_image(result)
+
+        logger.info(f"Saving processed image {self.hash}.{extension}")
         self.processed_image.delete(save=False)
         self.processed_image.save(f"{self.hash}.{extension}", ContentFile(
             processed_image.tobytes(), f"{processed_image}.{extension}"), save=False)
