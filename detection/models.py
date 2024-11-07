@@ -50,7 +50,8 @@ class Detection(models.Model):
             for box in result.boxes:
                 confidence = box.conf.item()
                 label = result.names[int(box.cls)]
-                model = random.choice(settings.DUMMY_MODELS[label])
+                model = random.choice(
+                    settings.DUMMY_MODELS.get(label, "Unknown"))
 
                 self.result_set.create(
                     confidence=confidence, label=label, model=model)

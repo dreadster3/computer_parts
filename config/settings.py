@@ -175,6 +175,7 @@ DUMMY_MODELS = {
     "RAM": ["Crucial", "Corsair", "G.Skill", "Kingston", "Patriot", "HyperX"],
     "MOTHERBOARD": ["ASUS", "Gigabyte", "MSI", "ASRock", "Biostar", "EVGA"],
     "PSU": ["Corsair", "EVGA", "Thermaltake", "Seasonic", "Cooler Master", "Antec"],
+    "HDD": ["Seagate", "Western Digital", "Toshiba", "Hitachi", "Samsung"],
 }
 
 TAILWIND_APP_NAME = 'theme'
