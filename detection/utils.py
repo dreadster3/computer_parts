@@ -42,23 +42,23 @@ def process_image(extension: str, image: File | InMemoryUploadedFile | Temporary
     elif isinstance(image, File):
         image_file = Image.open(image)
 
-    results = model.predict(
-        image_file, imgsz=640, conf=float(settings.YOLO_CONFIDENCE_THRESHOLD)
+    results = model.predict(image_file, imgsz=640, conf=float(
+        settings.YOLO_CONFIDENCE_THRESHOLD))
 
     if not results:
         raise ValueError("No objects detected")
 
-    result=results[0]
+    result = results[0]
 
     return result
 
 
 def plot_image(result: Results) -> Image.Image:
-    logger=logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
     logger.info("Plotting image")
 
-    processed_image: numpy.ndarray=result.plot()
-    ok, buf=cv2.imencode(".png", processed_image)
+    processed_image: numpy.ndarray = result.plot()
+    ok, buf = cv2.imencode(".png", processed_image)
     if not ok:
         raise ValueError("Error encoding image")
     return Image.fromarray(buf)
