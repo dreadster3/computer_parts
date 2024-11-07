@@ -43,7 +43,7 @@ def process_image(extension: str, image: File | InMemoryUploadedFile | Temporary
         image_file = Image.open(image)
 
     results = model.predict(
-        image_file, imgsz=640, conf=float(settings.YOLO_CONFIDENCE_THRESHOLD))
+        image_file, imgsz=640, conf=0.7)
 
     if not results:
         raise ValueError("No objects detected")
