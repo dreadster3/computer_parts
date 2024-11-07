@@ -165,3 +165,5 @@ uploads/
 
 node_modules/
 pyrightconfig.json
+.envrc
+.direnv

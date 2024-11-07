@@ -30,7 +30,8 @@ SECRET_KEY = os.getenv(
 DEBUG = os.getenv("DEBUG", "True") == "True"
 
 ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "").split(" ")
-CSRF_TRUSTED_ORIGINS = os.getenv("CSRF_TRUSTED_ORIGINS", "http://localhost:8000").split(" ")
+CSRF_TRUSTED_ORIGINS = os.getenv(
+    "CSRF_TRUSTED_ORIGINS", "http://localhost:8000").split(" ")
 
 # Application definition
 
@@ -123,6 +124,27 @@ USE_I18N = True
 
 USE_TZ = True
 
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "handlers": {
+        "console": {
+            "class": "logging.StreamHandler",
+        },
+    },
+    "root": {
+        "handlers": ["console"],
+        "level": "WARNING",
+    },
+    "loggers": {
+        "django": {
+            "handlers": ["console"],
+            "level": os.getenv("DJANGO_LOG_LEVEL", "INFO"),
+            "propagate": False,
+        },
+    },
+}
+
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
@@ -144,6 +166,7 @@ MEDIA_URL = "uploads/"
 YOLO_MODEL_ROOT = BASE_DIR / "models"
 YOLO_MODEL_NAME = os.getenv("YOLO_MODEL_NAME", "20241030.pt")
 YOLO_MODEL = YOLO(YOLO_MODEL_ROOT / YOLO_MODEL_NAME)
+YOLO_CONFIDENCE_THRESHOLD = 0.7
 
 DUMMY_MODELS = {
     "SSD": ["Samsung 860 EVO", "Samsung 970 EVO", "Samsung 980 PRO", "Crucial MX500", "Crucial P1", "Crucial P2", "Crucial P5", "Crucial P6", "Crucial P7", "Crucial P8", "Crucial P9", "Crucial P10"],

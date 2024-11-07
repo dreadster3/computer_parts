@@ -2,6 +2,7 @@ import io
 import cv2
 import numpy
 import hashlib
+import logging
 
 from PIL import Image
 from django.conf import settings
@@ -23,6 +24,9 @@ def process_image(extension: str, image: File | InMemoryUploadedFile | Temporary
     if not extension.startswith("."):
         extension = f".{extension}"
 
+    logger = logging.getLogger(__name__)
+    logger.info(f"Processing image with model {settings.YOLO_MODEL_NAME}")
+
     model: YOLO = settings.YOLO_MODEL
 
     if isinstance(image, InMemoryUploadedFile):
@@ -38,7 +42,9 @@ def process_image(extension: str, image: File | InMemoryUploadedFile | Temporary
     elif isinstance(image, File):
         image_file = Image.open(image)
 
-    results = model.predict(image_file)
+    results = model.predict(
+        image_file, conf=settings.YOLO_CONFIDENCE_THRESHOLD)
+
     if not results:
         raise ValueError("No objects detected")
 
