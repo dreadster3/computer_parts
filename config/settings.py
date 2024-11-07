@@ -134,7 +134,7 @@ LOGGING = {
     },
     "root": {
         "handlers": ["console"],
-        "level": "WARNING",
+        "level": os.getenv("LOG_LEVEL", "WARNING"),
     },
     "loggers": {
         "django": {
