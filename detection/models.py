@@ -39,14 +39,14 @@ class Detection(models.Model):
         processed_image = plot_image(result)
 
         logger.info(f"Saving processed image {self.hash}.{extension}")
-        self.processed_image.delete(save=False)
+        self.processed_image.delete(save=True)
         self.processed_image.save(f"{self.hash}.{extension}", ContentFile(
             processed_image.tobytes(), f"{processed_image}.{extension}"), save=False)
 
         super().save(*args, **kwargs)
 
+        self.result_set.all().delete()
         if result.boxes:
-            self.result_set.all().delete()
             for box in result.boxes:
                 confidence = box.conf.item()
                 label = result.names[int(box.cls)]
