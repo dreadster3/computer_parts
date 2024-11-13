@@ -24,7 +24,15 @@
             LD_LIBRARY_PATH = pkgs.lib.makeLibraryPath
               (with pkgs; [ zlib stdenv.cc.cc.lib libGL glib ]);
           };
-          buildInputs = with pkgs; [ python3 basedpyright poetry ];
+          venvDir = ".venv";
+          buildInputs = with pkgs; [
+            python3
+            python3Packages.mypy
+            python3Packages.ruff
+            basedpyright
+            poetry
+            python3Packages.venvShellHook
+          ];
         };
       };
       flake = {

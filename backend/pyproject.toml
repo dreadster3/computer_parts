@@ -12,12 +12,17 @@ pydantic-settings = "^2.6.1"
 ultralytics = "^8.3.29"
 requests = "^2.32.3"
 
+[tool.poetry.group.dev.dependencies]
+types-requests = "^2.32.0.20241016"
+mypy = "^1.13.0"
+ruff = "^0.7.3"
+
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
 
 [[tool.mypy.overrides]]
-module = "fastapi"
+module = "fastapi.*"
 ignore_missing_imports = true
 
 [[tool.mypy.overrides]]
@@ -26,4 +31,8 @@ ignore_missing_imports = true
 
 [[tool.mypy.overrides]]
 module = "pydantic_settings"
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = "ultralytics"
 ignore_missing_imports = true
