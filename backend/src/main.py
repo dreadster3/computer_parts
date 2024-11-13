@@ -12,6 +12,9 @@ from src.settings import settings
 
 
 app = FastAPI()
+os.makedirs(settings._raw_images_folder, exist_ok=True)
+os.makedirs(settings._processed_images_folder, exist_ok=True)
+
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
 
@@ -19,15 +22,53 @@ class UrlDetectionRequest(BaseModel):
     url: HttpUrl
 
 
-class UrlDetectionResponse(BaseModel):
-    path: FilePath
+class DetectionResult(BaseModel):
     confidence: float
     label: str
 
 
+class UrlDetectionResponse(BaseModel):
+    original_image: FilePath
+    processed_image: FilePath
+    results: list[DetectionResult]
+
+
+def process_image_file(file_path: str) -> UrlDetectionResponse:
+    model = settings.load_model()
+    filename = os.path.basename(file_path)
+
+    results = model.predict(
+        file_path,
+        imgsz=640,
+        conf=settings.confidence_threshold,
+    )
+    assert len(results) > 0
+    result = results[0]
+
+    processed_image_file_path = os.path.join(
+        settings._processed_images_folder, filename
+    )
+    _ = result.save(processed_image_file_path)
+
+    detection_results: list[DetectionResult] = []
+    if result.boxes:
+        for box in result.boxes:
+            confidence = box.conf.item()
+            label = result.names[int(box.cls)]
+            detection_results.append(
+                DetectionResult(confidence=confidence, label=label)
+            )
+
+    return UrlDetectionResponse(
+        original_image=Path(file_path),
+        processed_image=Path(processed_image_file_path),
+        results=detection_results,
+    )
+
+
 @app.post("/api/v1/detect/url")
 async def detect_url(request: UrlDetectionRequest):
-    extension = request.url.path.split(".")[1] if request.url.path else ""
+    extension = request.url.path.split(".")[-1] if request.url.path else ""
     response = requests.get(str(request.url), stream=True)
     hashobj = hashlib.sha256()
     with tempfile.NamedTemporaryFile(delete=False) as temp_file:
@@ -43,20 +84,7 @@ async def detect_url(request: UrlDetectionRequest):
         )
 
     shutil.move(current_file_path, final_file_path)
-
-    model = settings.load_model()
-
-    results = model.predict(
-        final_file_path, imgsz=640, conf=settings.confidence_threshold
-    )
-    assert len(results) == 1
-    result = results[0]
-
-    if result.boxes:
-        for box in result.boxes:
-            return box.conf.item()
-
-    return request
+    return process_image_file(final_file_path)
 
 
 @app.post("/api/v1/detect/image")
@@ -75,28 +103,4 @@ async def detect_image(image: UploadFile):
         final_file_path = os.path.join(settings._raw_images_folder, filename)
 
     shutil.move(current_file_path, final_file_path)
-
-    model = settings.load_model()
-
-    results = model.predict(
-        final_file_path,
-        imgsz=640,
-        conf=settings.confidence_threshold,
-    )
-    assert len(results) > 0
-    result = results[0]
-
-    processed_image_file_path = os.path.join(
-        settings._processed_images_folder, filename
-    )
-    _ = result.save(processed_image_file_path)
-    confidence: float = 0
-    label: str = ""
-    if result.boxes:
-        for box in result.boxes:
-            confidence = box.conf.item()
-            label = result.names[int(box.cls)]
-
-    return UrlDetectionResponse(
-        path=Path(processed_image_file_path), confidence=confidence, label=label
-    )
+    return process_image_file(final_file_path)
