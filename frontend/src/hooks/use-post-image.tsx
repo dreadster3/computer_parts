@@ -11,7 +11,7 @@ function usePostImage() {
 
   const { mutate, isPending, data } = useMutation({
     mutationFn: ({ image, url }: IPostImageProps) => {
-      if (url !== undefined) {
+      if (url !== undefined && url !== "") {
         return client.process_url_async(url);
       }
 

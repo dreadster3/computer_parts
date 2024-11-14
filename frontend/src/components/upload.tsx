@@ -7,6 +7,7 @@ import {
   FormLabel,
   FormControl,
   FormMessage,
+  FormDescription,
 } from "@/components/ui/form";
 import { FieldValues, useForm } from "react-hook-form";
 import {
@@ -18,21 +19,35 @@ import {
 import { TooltipArrow, TooltipPortal } from "@radix-ui/react-tooltip";
 import usePostImage from "@/hooks/use-post-image";
 import { IImageProcessingResponse } from "@/models/image-processing";
+import { useState } from "react";
 
 interface IUploadProps {
   setData: (data: IImageProcessingResponse) => void;
 }
 
 function Upload({ setData }: IUploadProps) {
-  const form = useForm();
+  const form = useForm({
+    defaultValues: {
+      url: "",
+      image: "",
+    },
+  });
+  const [file, setFile] = useState<File>();
   const { postImage } = usePostImage();
 
-  async function onSubmit(values: FieldValues) {
-    postImage(values, {
-      onSuccess: (data) => {
-        setData(data);
+  function onSubmit(values: FieldValues) {
+    postImage(
+      { image: file, url: values.url },
+      {
+        onSuccess: (data) => {
+          setData(data);
+          form.reset({
+            url: "",
+            image: "",
+          });
+        },
       },
-    });
+    );
   }
 
   return (
@@ -45,8 +60,9 @@ function Upload({ setData }: IUploadProps) {
             <FormItem>
               <FormLabel>Url</FormLabel>
               <FormControl>
-                <Input placeholder="url" {...field} />
+                <Input type="text" placeholder="url" {...field} />
               </FormControl>
+              <FormDescription>The url of any image</FormDescription>
               <FormMessage />
             </FormItem>
           )}
@@ -54,18 +70,20 @@ function Upload({ setData }: IUploadProps) {
         <FormField
           control={form.control}
           name="image"
-          render={({ field: { onChange, value } }) => (
+          render={({ field }) => (
             <FormItem>
               <FormLabel>Image</FormLabel>
               <FormControl>
                 <Input
                   type="file"
-                  value={value?.fileName}
+                  {...field}
                   onChange={(e) => {
-                    onChange(e.target.files?.[0]);
+                    setFile(e.target.files?.[0]);
+                    field.onChange(e);
                   }}
                 />
               </FormControl>
+              <FormDescription>Upload any image</FormDescription>
               <FormMessage />
             </FormItem>
           )}
