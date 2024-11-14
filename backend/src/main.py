@@ -5,6 +5,7 @@ import shutil
 from fastapi import FastAPI, UploadFile
 from pydantic import BaseModel, FilePath, HttpUrl
 from fastapi.staticfiles import StaticFiles
+from fastapi.middleware.cors import CORSMiddleware
 import tempfile
 from pathlib import Path
 
@@ -12,6 +13,15 @@ from src.settings import settings
 
 
 app = FastAPI()
+origins = ["*"]
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 os.makedirs(settings._raw_images_folder, exist_ok=True)
 os.makedirs(settings._processed_images_folder, exist_ok=True)
 
