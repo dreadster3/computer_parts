@@ -1,6 +1,8 @@
 export interface IDetectionResult {
   label: string;
   confidence: number;
+  image: string;
+  models: string[];
 }
 
 export interface IImageProcessingResponse {
@@ -12,10 +14,14 @@ export interface IImageProcessingResponse {
 export class DetectionResult {
   label: string;
   confidence: number;
+  image: string;
+  models: string[];
 
   constructor(data: IDetectionResult) {
     this.label = data.label;
     this.confidence = data.confidence;
+    this.image = data.image;
+    this.models = data.models ?? [];
   }
 }
 

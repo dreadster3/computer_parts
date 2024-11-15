@@ -1,5 +1,6 @@
 import { useMutation } from "@tanstack/react-query";
 import useImageProcessorClient from "./use-image-processor-client";
+import { randomChoices } from "@/utils/arrays";
 
 interface IPostImageProps {
   image?: File;
@@ -20,6 +21,18 @@ function usePostImage() {
       }
 
       throw Error("Should never happen");
+    },
+    onSuccess: (data) => {
+      data.results.forEach((result) => {
+        const amount = Math.floor(Math.random() * 5);
+        const models = randomChoices([...Array(amount).keys()], amount).map(
+          (number) => `${result.label}${number}`,
+        );
+
+        console.log(models);
+
+        result.models.push(...models);
+      });
     },
   });
 

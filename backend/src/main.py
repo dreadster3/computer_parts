@@ -35,6 +35,7 @@ class UrlDetectionRequest(BaseModel):
 class DetectionResult(BaseModel):
     confidence: float
     label: str
+    image: Path
 
 
 class UrlDetectionResponse(BaseModel):
@@ -55,18 +56,33 @@ def process_image_file(file_path: str) -> UrlDetectionResponse:
     assert len(results) > 0
     result = results[0]
 
-    processed_image_file_path = os.path.join(
-        settings._processed_images_folder, filename
-    )
+    hash = filename.split(".")[0]
+    extension = filename.split(".")[-1]
+    processed_folder = os.path.join(settings._processed_images_folder, hash)
+    os.makedirs(processed_folder, exist_ok=True)
+    processed_image_file_path = os.path.join(processed_folder, filename)
+    processed_crops_folder = os.path.join(processed_folder, "crops")
+    shutil.rmtree(processed_crops_folder, ignore_errors=True)
     _ = result.save(processed_image_file_path)
+    _ = result.save_crop(processed_crops_folder, Path(filename))
 
     detection_results: list[DetectionResult] = []
+    label_idx: dict[str, int] = {}
     if result.boxes:
         for box in result.boxes:
-            confidence = box.conf.item()
-            label = result.names[int(box.cls)]
+            confidence: float = box.conf.item()
+            label: str = result.names[int(box.cls)]
+            idx = label_idx.get(label, 1)
+            identifier = str(idx) if idx > 1 else ""
+            image = os.path.join(
+                processed_crops_folder,
+                label,
+                f"{hash}.{extension}{identifier}.{extension}",
+            )
+            label_idx[label] = label_idx.get(label, 1) + 1
+
             detection_results.append(
-                DetectionResult(confidence=confidence, label=label)
+                DetectionResult(confidence=confidence, label=label, image=image)
             )
 
     return UrlDetectionResponse(

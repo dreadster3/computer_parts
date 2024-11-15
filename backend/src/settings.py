@@ -1,6 +1,5 @@
 from functools import cache
 import os
-from typing import final
 from ultralytics import YOLO
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
@@ -10,7 +9,6 @@ def load_model(path: str) -> YOLO:
     return YOLO(path)
 
 
-@final
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(env_prefix="computerparts")
 
@@ -18,8 +16,8 @@ class Settings(BaseSettings):
     yolo_model_name: str = "20241107.pt"
     confidence_threshold: float = 0.5
 
-    _static_folder: str = "static"
-    _uploads_folder: str = os.path.join(_static_folder, "uploads")
+    static_folder: str = "static"
+    _uploads_folder: str = os.path.join(static_folder, "uploads")
     _raw_images_folder: str = os.path.join(_uploads_folder, "raw")
     _processed_images_folder: str = os.path.join(_uploads_folder, "processed")
 
