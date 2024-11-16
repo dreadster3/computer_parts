@@ -21,6 +21,7 @@ import usePostImage from "@/hooks/use-post-image";
 import { IImageProcessingResponse } from "@/models/image-processing";
 import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
+import NumberInput from "./number-input";
 
 interface IUploadProps {
   className?: string;
@@ -33,6 +34,7 @@ function Upload({ setData, className, setIsLoading }: IUploadProps) {
     defaultValues: {
       url: "",
       image: "",
+      confidence_threshold: 0.5,
     },
   });
   const [file, setFile] = useState<File>();
@@ -61,7 +63,7 @@ function Upload({ setData, className, setIsLoading }: IUploadProps) {
 
   return (
     <div className={cn("flex flex-col", className)}>
-      <h1 className="h-16 text-2xl font-extrabold">Upload Form</h1>
+      <h1 className="h-16 pb-6 text-2xl font-extrabold">Upload Form</h1>
       <div className="flex w-full">
         <Form {...form}>
           <form
@@ -99,6 +101,29 @@ function Upload({ setData, className, setIsLoading }: IUploadProps) {
                     />
                   </FormControl>
                   <FormDescription>Upload any image</FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="confidence_threshold"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Confidence Threshold</FormLabel>
+                  <FormControl>
+                    <NumberInput
+                      className="w-1/2"
+                      placeholder={"0.5"}
+                      step={0.1}
+                      min={0}
+                      max={1}
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormDescription>
+                    Threshold for detecting objects in image
+                  </FormDescription>
                   <FormMessage />
                 </FormItem>
               )}

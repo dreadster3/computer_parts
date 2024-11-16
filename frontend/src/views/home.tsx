@@ -55,9 +55,9 @@ function Home() {
           "opacity-10 pointer-events-none": isLoading,
         })}
       >
-        <div className="flex flex-col h-full basis-1/2 py-32 px-5 items-center">
+        <div className="flex flex-col h-full basis-1/2 py-16 px-5 items-center">
           <Upload
-            className="justify-end w-2/3 p-8 h-1/3"
+            className="basis-1/2 justify-end w-2/3 p-8 h-1/3"
             setData={setData}
             setIsLoading={setIsLoading}
           />
