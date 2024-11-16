@@ -10,7 +10,7 @@ interface IPostImageProps {
 function usePostImage() {
   const client = useImageProcessorClient();
 
-  const { mutate, isPending, data } = useMutation({
+  const { mutate, isPending, data, isSuccess, isError, isIdle } = useMutation({
     mutationFn: ({ image, url }: IPostImageProps) => {
       if (url !== undefined && url !== "") {
         return client.process_url_async(url);
@@ -29,14 +29,20 @@ function usePostImage() {
           (number) => `${result.label}${number}`,
         );
 
-        console.log(models);
-
         result.models.push(...models);
       });
     },
   });
 
-  return { postImage: mutate, isPending, data };
+  return {
+    postImage: mutate,
+    isPending,
+    data,
+    isSuccess,
+    isIdle,
+    isError,
+    isSettled: isError || isSuccess,
+  };
 }
 
 export default usePostImage;

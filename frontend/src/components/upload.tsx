@@ -19,15 +19,16 @@ import {
 import { TooltipArrow, TooltipPortal } from "@radix-ui/react-tooltip";
 import usePostImage from "@/hooks/use-post-image";
 import { IImageProcessingResponse } from "@/models/image-processing";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 
 interface IUploadProps {
   className?: string;
   setData: (data: IImageProcessingResponse) => void;
+  setIsLoading: (isLoading: boolean) => void;
 }
 
-function Upload({ setData, className }: IUploadProps) {
+function Upload({ setData, className, setIsLoading }: IUploadProps) {
   const form = useForm({
     defaultValues: {
       url: "",
@@ -42,6 +43,10 @@ function Upload({ setData, className }: IUploadProps) {
     setFile(undefined);
   }
 
+  useEffect(() => {
+    setIsLoading(isPending);
+  }, [isPending, setIsLoading]);
+
   function onSubmit(values: FieldValues) {
     postImage(
       { image: file, url: values.url },
@@ -52,10 +57,6 @@ function Upload({ setData, className }: IUploadProps) {
         },
       },
     );
-  }
-
-  if (isPending) {
-    return <p>Loading...</p>;
   }
 
   return (

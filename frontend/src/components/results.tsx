@@ -58,20 +58,37 @@ interface IResultsProps {
 }
 
 function Results({ className, data }: IResultsProps) {
+  const calculateBasisClassName = (amount: number) => {
+    const half = Math.floor(amount / 2);
+    if (half <= 1) {
+      return "";
+    }
+
+    return `basis-1/${Math.min(3, half)}`;
+  };
+
   return (
     <div
-      className={cn("flex w-full h-full px-10 py-8 justify-center", className)}
+      className={cn(
+        "flex flex-col w-full h-full px-10 py-8 justify-center",
+        className,
+      )}
     >
+      <h1 className="pb-8">Results</h1>
+
       <Carousel
-        className="flex w-5/6 h-full items-center justify-center"
+        className="flex w-5/6 h-full"
         opts={{
-          align: "center",
+          align: "start",
           loop: true,
         }}
       >
-        <CarouselContent className="h-full w-full">
+        <CarouselContent className="h-full">
           {data.map((item, idx) => (
-            <CarouselItem key={idx}>
+            <CarouselItem
+              className={cn("pl-10", calculateBasisClassName(data.length))}
+              key={idx}
+            >
               <Result id={idx} {...item} />
             </CarouselItem>
           ))}
