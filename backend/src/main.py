@@ -1,8 +1,9 @@
+from typing import Annotated
 import requests
 import hashlib
 import os
 import shutil
-from fastapi import FastAPI, UploadFile
+from fastapi import FastAPI, Form, UploadFile
 from pydantic import BaseModel, FilePath, HttpUrl
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
@@ -30,6 +31,7 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 
 class UrlDetectionRequest(BaseModel):
     url: HttpUrl
+    confidence_threshold: float
 
 
 class DetectionResult(BaseModel):
@@ -44,14 +46,16 @@ class UrlDetectionResponse(BaseModel):
     results: list[DetectionResult]
 
 
-def process_image_file(file_path: str) -> UrlDetectionResponse:
+def process_image_file(
+    file_path: str, confidence_threshold: float
+) -> UrlDetectionResponse:
     model = settings.load_model()
     filename = os.path.basename(file_path)
 
     results = model.predict(
         file_path,
         imgsz=640,
-        conf=settings.confidence_threshold,
+        conf=confidence_threshold,
     )
     assert len(results) > 0
     result = results[0]
@@ -110,11 +114,13 @@ async def detect_url(request: UrlDetectionRequest):
         )
 
     shutil.move(current_file_path, final_file_path)
-    return process_image_file(final_file_path)
+    return process_image_file(final_file_path, request.confidence_threshold)
 
 
 @app.post("/api/v1/detect/image")
-async def detect_image(image: UploadFile):
+async def detect_image(
+    image: UploadFile, confidence_threshold: Annotated[float, Form()]
+):
     extension = image.filename.split(".")[-1] if image.filename else ""
     hashobj = hashlib.sha256()
     with tempfile.NamedTemporaryFile(delete=False) as temp_file:
@@ -129,4 +135,4 @@ async def detect_image(image: UploadFile):
         final_file_path = os.path.join(settings._raw_images_folder, filename)
 
     shutil.move(current_file_path, final_file_path)
-    return process_image_file(final_file_path)
+    return process_image_file(final_file_path, confidence_threshold)

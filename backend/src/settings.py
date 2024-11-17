@@ -14,7 +14,6 @@ class Settings(BaseSettings):
 
     _models_path: str = "models"
     yolo_model_name: str = "20241107.pt"
-    confidence_threshold: float = 0.5
 
     static_folder: str = "static"
     _uploads_folder: str = os.path.join(static_folder, "uploads")

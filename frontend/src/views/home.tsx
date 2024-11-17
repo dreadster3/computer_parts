@@ -55,21 +55,26 @@ function Home() {
           "opacity-10 pointer-events-none": isLoading,
         })}
       >
-        <div className="flex flex-col h-full basis-1/2 py-16 px-5 items-center">
-          <Upload
-            className="basis-1/2 justify-end w-2/3 p-8 h-1/3"
-            setData={setData}
-            setIsLoading={setIsLoading}
-          />
+        <div className="flex flex-col h-full w-1/2 py-8 px-5 items-center">
+          <div className="h-1/2 flex flex-col w-2/3 px-8 pb-6">
+            <h1 className="h-16 text-2xl font-extrabold self-start">
+              Upload Form
+            </h1>
+            <Upload
+              className="border-2 py-10 rounded-md "
+              setData={setData}
+              setIsLoading={setIsLoading}
+            />
+          </div>
           <Separator />
           <Preview
-            className="w-2/3 h-2/3 justify-self-end"
+            className="h-1/2 w-2/3"
             title="Processed"
             url={data.processed_image}
           />
         </div>
         <Separator orientation="vertical" />
-        <div className="flex items-center h-full basis-1/2 px-5">
+        <div className="flex items-center h-full w-1/2 px-5">
           <Results className="h-2/3" data={data.results} />
         </div>
       </div>

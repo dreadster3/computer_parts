@@ -26,25 +26,25 @@ function Result({ id, image, label, confidence, models }: IResultProps) {
       <div className="flex flex-col w-full">
         <div>
           <p>
-            <span className="font-extrabold">Id:</span>
+            <span className="font-extrabold">Id: </span>
             {id}
           </p>
         </div>
         <div>
           <p>
-            <span className="font-extrabold">Label:</span>
+            <span className="font-extrabold">Label: </span>
             {label}
           </p>
         </div>
         <div>
           <p>
-            <span className="font-extrabold">Confidence:</span>
-            {confidence}
+            <span className="font-extrabold">Confidence: </span>
+            {confidence * 100}%
           </p>
         </div>
         <div>
           <p>
-            <span className="font-extrabold">Models:</span>[{models.join(",")}]
+            <span className="font-extrabold">Models: </span>[{models.join(",")}]
           </p>
         </div>
       </div>
@@ -64,17 +64,19 @@ function Results({ className, data }: IResultsProps) {
       return "";
     }
 
-    return `basis-1/${Math.min(3, half)}`;
+    return `basis-1/${Math.min(3, half).toString()}`;
   };
 
   return (
     <div
       className={cn(
-        "flex flex-col w-full h-full px-10 py-8 justify-center",
+        "flex flex-col w-full h-full px-10 py-8 items-center justify-center",
         className,
       )}
     >
-      <h1 className="pb-8">Results</h1>
+      <div className="flex w-5/6 justify-start">
+        <h1 className="pb-8">Results</h1>
+      </div>
 
       <Carousel
         className="flex w-5/6 h-full"
@@ -83,7 +85,7 @@ function Results({ className, data }: IResultsProps) {
           loop: true,
         }}
       >
-        <CarouselContent className="h-full">
+        <CarouselContent className="h-full -ml-0">
           {data.map((item, idx) => (
             <CarouselItem
               className={cn("pl-10", calculateBasisClassName(data.length))}

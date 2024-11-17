@@ -11,9 +11,13 @@ class ImageProcessorClient {
     this.axiosInstance = instance ?? axios.create();
   }
 
-  async process_image_async(image: File): Promise<IImageProcessingResponse> {
+  async process_image_async(
+    image: File,
+    confidence_threshold: number,
+  ): Promise<IImageProcessingResponse> {
     const formData = new FormData();
     formData.append("image", image);
+    formData.append("confidence_threshold", confidence_threshold.toString());
 
     const options: AxiosRequestConfig = {
       method: "POST",
@@ -29,9 +33,13 @@ class ImageProcessorClient {
     return new ImageProcessingResponse(response.data);
   }
 
-  async process_url_async(url: string): Promise<IImageProcessingResponse> {
+  async process_url_async(
+    url: string,
+    confidence_threshold: number,
+  ): Promise<IImageProcessingResponse> {
     const data = {
       url: url,
+      confidence_threshold: confidence_threshold,
     };
 
     const options: AxiosRequestConfig = {
