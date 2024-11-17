@@ -27,6 +27,8 @@
             typescript-language-server
             tailwindcss-language-server
             eslint
+            vscode-langservers-extracted
+            nodePackages.prettier
           ];
         };
       };

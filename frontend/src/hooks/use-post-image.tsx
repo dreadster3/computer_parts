@@ -31,7 +31,7 @@ function usePostImage() {
       );
       data.results.forEach((result) => {
         const amount = Math.floor(Math.random() * 5);
-        const models = randomChoices([...Array(amount).keys()], amount).map(
+        const models = randomChoices([...Array(5).keys()], amount).map(
           (number) => `${result.label}${number}`,
         );
         result.confidence = Math.round(result.confidence * 100) / 100;

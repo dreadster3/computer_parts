@@ -39,13 +39,18 @@ function Result({ id, image, label, confidence, models }: IResultProps) {
         <div>
           <p>
             <span className="font-extrabold">Confidence: </span>
-            {confidence * 100}%
+            {Math.round(confidence * 100)}%
           </p>
         </div>
         <div>
-          <p>
-            <span className="font-extrabold">Models: </span>[{models.join(",")}]
-          </p>
+          <div>
+            <h2 className="font-extrabold">Models: </h2>
+            <ol className="list-decimal list-inside indent-4">
+              {models.map((model) => (
+                <li>{model}</li>
+              ))}
+            </ol>
+          </div>
         </div>
       </div>
     </div>
