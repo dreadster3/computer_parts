@@ -5,8 +5,8 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile
-      args:
-        IMAGE_PROCESSOR_URL: "http://localhost:8000"
+    #   args:
+    #     IMAGE_PROCESSOR_URL: "http://localhost:8000"
     # ports:
     #   - "80:3000"
     volumes:
