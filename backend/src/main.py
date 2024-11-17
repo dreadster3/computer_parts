@@ -81,7 +81,7 @@ def process_image_file(
             image = os.path.join(
                 processed_crops_folder,
                 label,
-                f"{hash}.{extension}{identifier}.{extension}",
+                f"{hash}.{extension}{identifier}.{extension.lower()}",
             )
             label_idx[label] = label_idx.get(label, 1) + 1
 
