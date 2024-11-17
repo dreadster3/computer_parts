@@ -1,0 +1,29 @@
+name: computerparts
+
+services:
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      args:
+        IMAGE_PROCESSOR_URL: "http://localhost:8000"
+    ports:
+      - "80:3000"
+    volumes:
+      - staticfiles:/app/dist/static:ro
+    links:
+      - backend
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+
+    ports:
+      - "8000:8000"
+
+    volumes:
+      - staticfiles:/app/static
+
+volumes:
+  staticfiles:

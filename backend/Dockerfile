@@ -13,4 +13,6 @@ RUN poetry install
 
 COPY . .
 
-CMD ["poetry", "run", "fastapi", "run", "src/main.py", "--port", "80"]
+EXPOSE 8000
+
+CMD ["poetry", "run", "fastapi", "run", "src/main.py", "--port", "8000"]
