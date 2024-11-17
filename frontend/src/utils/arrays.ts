@@ -1,5 +1,3 @@
-import { assert } from "console";
-
 export function randomChoices<T>(list: T[], amount: number): T[] {
   if (amount > list.length) {
     throw Error("Not enough items");
