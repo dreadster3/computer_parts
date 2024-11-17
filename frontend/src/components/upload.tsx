@@ -9,7 +9,7 @@ import {
   FormMessage,
   FormDescription,
 } from "@/components/ui/form";
-import { FieldValues, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import {
   Tooltip,
   TooltipTrigger,
@@ -19,7 +19,7 @@ import {
 import { TooltipArrow, TooltipPortal } from "@radix-ui/react-tooltip";
 import usePostImage from "@/hooks/use-post-image";
 import { IImageProcessingResponse } from "@/models/image-processing";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { cn } from "@/lib/utils";
 import NumberInput from "./number-input";
 import { z } from "zod";
