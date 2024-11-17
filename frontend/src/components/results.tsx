@@ -18,7 +18,7 @@ interface IResultProps {
 
 function Result({ id, image, label, confidence, models }: IResultProps) {
   return (
-    <div className="flex flex-col w-full h-full items-center">
+    <div className="flex flex-col max-h-full w-full h-auto items-center">
       <img
         className="w-full h-full rounded-md object-contain border-2"
         src={image}
@@ -88,7 +88,10 @@ function Results({ className, data }: IResultsProps) {
         <CarouselContent className="h-full -ml-0">
           {data.map((item, idx) => (
             <CarouselItem
-              className={cn("pl-10", calculateBasisClassName(data.length))}
+              className={cn(
+                "pl-10 content-center",
+                calculateBasisClassName(data.length),
+              )}
               key={idx}
             >
               <Result id={idx} {...item} />

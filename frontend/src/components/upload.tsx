@@ -22,6 +22,8 @@ import { IImageProcessingResponse } from "@/models/image-processing";
 import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 import NumberInput from "./number-input";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 interface IUploadProps {
   className?: string;
@@ -29,39 +31,69 @@ interface IUploadProps {
   setIsLoading: (isLoading: boolean) => void;
 }
 
+const MAX_UPLOAD_SIZE = 5 * 1024 * 1024;
+const IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
+const formSchema = z
+  .object({
+    url: z.string().url().optional().or(z.literal("")),
+    image: z
+      .instanceof(FileList)
+      .optional()
+      .refine((file) => {
+        return (file?.length ?? 0) <= 1;
+      }, "Too many files")
+      .refine(
+        (file) => file?.[0]?.size ?? 0 <= MAX_UPLOAD_SIZE,
+        "Max upload size is 5MB",
+      )
+      .refine(
+        (file) => IMAGE_TYPES.includes(file?.[0]?.type ?? "image/jpeg"),
+        "Invalid file type",
+      ),
+    confidence_threshold: z.preprocess(
+      (a) => Number(z.any().parse(a)),
+      z.number().gte(0).lte(1),
+    ),
+  })
+  .refine(
+    (val) => {
+      // XOR
+      if ((val.image?.length ?? 0) > 0 && (val.url?.length ?? 0) > 1) {
+        return false;
+      }
+      return true;
+    },
+    { message: "Specify Image or URL", path: ["image"] },
+  );
+
 function Upload({ setData, className, setIsLoading }: IUploadProps) {
-  const form = useForm({
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
     defaultValues: {
       url: "",
-      image: "",
+      image: undefined,
       confidence_threshold: 0.5,
     },
   });
-  const [file, setFile] = useState<File>();
+  const fileRef = form.register("image");
   const { postImage, isPending } = usePostImage();
-
-  function reset(values: FieldValues) {
-    form.reset({
-      confidence_threshold: values.confidence_threshold,
-    });
-    setFile(undefined);
-  }
 
   useEffect(() => {
     setIsLoading(isPending);
   }, [isPending, setIsLoading]);
 
-  function onSubmit(values: FieldValues) {
+  function onSubmit(values: z.infer<typeof formSchema>) {
     postImage(
       {
-        image: file,
+        image: values.image?.[0],
         url: values.url,
         confidence_threshold: values.confidence_threshold,
       },
       {
         onSuccess: (data) => {
           setData(data);
-          reset(values);
+          form.resetField("url");
+          form.resetField("image");
         },
       },
     );
@@ -91,17 +123,14 @@ function Upload({ setData, className, setIsLoading }: IUploadProps) {
           <FormField
             control={form.control}
             name="image"
-            render={({ field }) => (
+            render={() => (
               <FormItem>
                 <FormLabel>Image</FormLabel>
                 <FormControl>
                   <Input
                     type="file"
-                    {...field}
-                    onChange={(e) => {
-                      setFile(e.target.files?.[0]);
-                      field.onChange(e);
-                    }}
+                    accept={IMAGE_TYPES.join(",")}
+                    {...fileRef}
                   />
                 </FormControl>
                 <FormDescription>Upload any image</FormDescription>
