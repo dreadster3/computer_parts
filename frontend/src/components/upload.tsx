@@ -24,6 +24,7 @@ import { cn } from "@/lib/utils";
 import NumberInput from "./number-input";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useToast } from "@/hooks/use-toast";
 
 interface IUploadProps {
   className?: string;
@@ -77,12 +78,19 @@ function Upload({ setData, className, setIsLoading }: IUploadProps) {
   });
   const fileRef = form.register("image");
   const { postImage, isPending } = usePostImage();
+  const { toast } = useToast();
 
   useEffect(() => {
     setIsLoading(isPending);
   }, [isPending, setIsLoading]);
 
   function onSubmit(values: z.infer<typeof formSchema>) {
+    toast({
+      title: "Status",
+      description: "File uploaded successfully",
+      duration: 2000,
+    });
+
     postImage(
       {
         image: values.image?.[0],
