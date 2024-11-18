@@ -36,7 +36,7 @@ class Settings(BaseSettings):
     def load_model(self) -> YOLO:
         self.__init__()
 
-        return load_model(os.path.join(self.models_path, self.yolo_model_name))
+        return load_model(os.path.join(self._models_path, self.yolo_model_name))
 
 
 settings = Settings()
