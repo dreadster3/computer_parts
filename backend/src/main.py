@@ -23,8 +23,8 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-os.makedirs(settings._raw_images_folder, exist_ok=True)
-os.makedirs(settings._processed_images_folder, exist_ok=True)
+os.makedirs(settings.raw_images_folder, exist_ok=True)
+os.makedirs(settings.processed_images_folder, exist_ok=True)
 
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
@@ -53,16 +53,14 @@ def process_image_file(
     filename = os.path.basename(file_path)
 
     results = model.predict(
-        file_path,
-        imgsz=640,
-        conf=confidence_threshold,
+        file_path, imgsz=640, conf=confidence_threshold, verbose=False
     )
     assert len(results) > 0
     result = results[0]
 
     hash = filename.split(".")[0]
     extension = filename.split(".")[-1]
-    processed_folder = os.path.join(settings._processed_images_folder, hash)
+    processed_folder = os.path.join(settings.processed_images_folder, hash)
     os.makedirs(processed_folder, exist_ok=True)
     processed_image_file_path = os.path.join(processed_folder, filename)
     processed_crops_folder = os.path.join(processed_folder, "crops")
@@ -110,7 +108,7 @@ async def detect_url(request: UrlDetectionRequest):
 
         file_hash = hashobj.hexdigest()
         final_file_path = "{}.{}".format(
-            os.path.join(settings._raw_images_folder, file_hash), extension
+            os.path.join(settings.raw_images_folder, file_hash), extension
         )
 
     shutil.move(current_file_path, final_file_path)
@@ -132,7 +130,7 @@ async def detect_image(
 
         file_hash = hashobj.hexdigest()
         filename = "{}.{}".format(file_hash, extension)
-        final_file_path = os.path.join(settings._raw_images_folder, filename)
+        final_file_path = os.path.join(settings.raw_images_folder, filename)
 
     shutil.move(current_file_path, final_file_path)
     return process_image_file(final_file_path, confidence_threshold)
