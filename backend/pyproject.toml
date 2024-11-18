@@ -1,0 +1,38 @@
+[tool.poetry]
+name = "backend"
+version = "2.0.0"
+description = "Backend for computer vision, computer parts identification system"
+authors = ["dreadster3 <afonso.antunes@live.com.pt>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+fastapi = { extras = ["standard"], version = "^0.115.5" }
+pydantic-settings = "^2.6.1"
+ultralytics = "^8.3.29"
+requests = "^2.32.3"
+
+[tool.poetry.group.dev.dependencies]
+types-requests = "^2.32.0.20241016"
+mypy = "^1.13.0"
+ruff = "^0.7.3"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[[tool.mypy.overrides]]
+module = "fastapi.*"
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = "pydantic"
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = "pydantic_settings"
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = "ultralytics"
+ignore_missing_imports = true

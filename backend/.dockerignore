@@ -1,0 +1,8 @@
+.venv
+.mypy_cache
+.direnv
+.envrc
+pyrightconfig.json
+static
+flake.nix
+flake.lock

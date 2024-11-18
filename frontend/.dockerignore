@@ -1,0 +1,10 @@
+node_modules
+.git
+.gitignore
+*.md
+dist
+public/static
+flake.nix
+flake.lock
+Dockerfile
+.env
