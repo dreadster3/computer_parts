@@ -19,7 +19,7 @@ function Preview({ title, url, className }: IPreviewProps) {
     <div className={cn("flex flex-col w-full items-center p-8", className)}>
       <h1 className="self-start">{title}</h1>
       <img
-        className="w-full h-auto max-h-full rounded-md object-contain border-2"
+        className="w-full h-auto max-h-[50vh] xl:max-h-full rounded-md object-contain border-2"
         src={sanitize_url(url)}
       />
     </div>
