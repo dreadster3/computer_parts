@@ -18,12 +18,12 @@ interface IResultProps {
 
 function Result({ id, image, label, confidence, models }: IResultProps) {
   return (
-    <div className="flex flex-col max-h-full w-full h-auto items-center">
+    <div className="flex flex-col max-h-full w-full h-full items-center">
       <img
-        className="w-full h-full rounded-md object-contain border-2"
+        className="w-full h-5/6 rounded-md object-contain border-2"
         src={image}
       />
-      <div className="flex flex-col w-full">
+      <div className="flex flex-col h-1/6 w-full">
         <div>
           <p>
             <span className="font-extrabold">Id: </span>
@@ -81,29 +81,31 @@ function Results({ className, data }: IResultsProps) {
     >
       <h1 className="self-start pb-8">Results</h1>
 
-      <Carousel
-        className="flex w-full xl:w-5/6 h-full"
-        opts={{
-          align: "start",
-          loop: true,
-        }}
-      >
-        <CarouselContent className="h-full -ml-0">
-          {data.map((item, idx) => (
-            <CarouselItem
-              className={cn(
-                "pl-0 content-center",
-                calculateBasisClassName(data.length),
-              )}
-              key={idx}
-            >
-              <Result id={idx} {...item} />
-            </CarouselItem>
-          ))}
-        </CarouselContent>
-        <CarouselPrevious />
-        <CarouselNext />
-      </Carousel>
+      <div className="flex w-full h-full px-16 xl:px-0 justify-center items-center ">
+        <Carousel
+          className="flex w-full xl:w-5/6 h-full"
+          opts={{
+            align: "start",
+            loop: true,
+          }}
+        >
+          <CarouselContent className="h-full max-h-[50vh] -ml-0">
+            {data.map((item, idx) => (
+              <CarouselItem
+                className={cn(
+                  "content-center",
+                  calculateBasisClassName(data.length),
+                )}
+                key={idx}
+              >
+                <Result id={idx} {...item} />
+              </CarouselItem>
+            ))}
+          </CarouselContent>
+          <CarouselPrevious />
+          <CarouselNext />
+        </Carousel>
+      </div>
     </div>
   );
 }
