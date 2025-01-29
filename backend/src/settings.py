@@ -1,7 +1,8 @@
-from functools import cache
 import os
-from ultralytics import YOLO
+from functools import cache
+
 from pydantic_settings import BaseSettings, SettingsConfigDict
+from ultralytics import YOLO
 
 
 @cache

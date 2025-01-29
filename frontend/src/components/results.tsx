@@ -75,16 +75,14 @@ function Results({ className, data }: IResultsProps) {
   return (
     <div
       className={cn(
-        "flex flex-col w-full h-full px-10 py-8 items-center justify-center",
+        "flex flex-col w-full h-full p-8 xl:px-10 xl:py-8 items-center justify-center",
         className,
       )}
     >
-      <div className="flex w-5/6 justify-start">
-        <h1 className="pb-8">Results</h1>
-      </div>
+      <h1 className="self-start pb-8">Results</h1>
 
       <Carousel
-        className="flex w-5/6 h-full"
+        className="flex w-full xl:w-5/6 h-full"
         opts={{
           align: "start",
           loop: true,
@@ -94,7 +92,7 @@ function Results({ className, data }: IResultsProps) {
           {data.map((item, idx) => (
             <CarouselItem
               className={cn(
-                "pl-10 content-center",
+                "pl-0 content-center",
                 calculateBasisClassName(data.length),
               )}
               key={idx}

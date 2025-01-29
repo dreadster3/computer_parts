@@ -1,17 +1,17 @@
-from typing import Annotated
-import requests
 import hashlib
 import os
 import shutil
-from fastapi import FastAPI, Form, UploadFile
-from pydantic import BaseModel, FilePath, HttpUrl
-from fastapi.staticfiles import StaticFiles
-from fastapi.middleware.cors import CORSMiddleware
 import tempfile
 from pathlib import Path
+from typing import Annotated
+
+import requests
+from fastapi import FastAPI, Form, UploadFile
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
+from pydantic import BaseModel, FilePath, HttpUrl
 
 from src.settings import settings
-
 
 app = FastAPI()
 origins = ["*"]
