@@ -7,7 +7,7 @@ services:
       dockerfile: Dockerfile
       args:
         IMAGE_PROCESSOR_URL: ${IMAGE_PROCESSOR_URL}
-    expose:
+    ports:
       - 3000
     volumes:
       - staticfiles:/app/dist/static:ro
@@ -18,7 +18,7 @@ services:
     build:
       context: ./backend
       dockerfile: Dockerfile
-    expose:
+    ports:
       - 8000
     volumes:
       - staticfiles:/app/static
