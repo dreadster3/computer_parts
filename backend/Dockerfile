@@ -9,7 +9,7 @@ RUN pip install poetry
 
 COPY ./pyproject.toml ./poetry.lock ./README.md ./
 
-RUN poetry install
+RUN poetry install --no-root
 
 COPY . .
 
